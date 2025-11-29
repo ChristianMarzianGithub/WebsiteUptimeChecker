@@ -1,0 +1,260 @@
+Prompt for Codex — Website Uptime Checker Web App
+
+PROMPT START
+
+Build a complete Website Uptime Checker web application.
+
+Architecture
+
+Frontend: React + TypeScript + Vite
+
+Backend: Node.js (Express) or Python (FastAPI) — choose one and implement
+
+Styling: TailwindCSS
+
+Provide Dockerfiles for both frontend and backend
+
+Provide docker-compose.yml
+
+App must be deployable on GCP Cloud Run (each service in its own container)
+
+Clean, organized folder structure
+
+App Purpose
+
+The app must let users check the availability, response time, and technical health of any website by URL.
+
+The backend must perform real HTTP checks; the frontend simply displays results.
+
+Core Features
+1. Website Status Check
+
+Backend must perform a request to the given URL and return:
+
+HTTP status code
+
+Status text (UP, DOWN, REDIRECT, TIMEOUT, SSL ERROR)
+
+Response time (ms)
+
+Final resolved URL (after redirects)
+
+Timestamp
+
+2. SSL Certificate Check
+
+Backend must gather:
+
+SSL expiration date
+
+Days until expiration
+
+Issuer
+
+Whether certificate is valid
+
+Whether hostname matches
+
+3. Redirect Chain Tracking
+
+Return an array of:
+
+[ "http://example.com", "https://example.com", ... ]
+
+4. DNS Resolution
+
+Backend must resolve:
+
+A
+
+AAAA
+
+CNAME
+
+MX
+
+NS
+
+Return as JSON.
+
+5. Uptime Monitoring Mode
+
+Implement a simple monitoring engine (backend):
+
+Store list of monitored URLs (in-memory or lightweight JSON file; no full DB required unless preferred)
+
+Every 60 seconds check each monitored URL
+
+Keep the last 20 checks in history per URL
+
+Provide an endpoint for fetching the history
+
+6. Alerts (optional but recommended)
+
+Implement:
+
+Email alerts OR webhook alerts
+
+Triggered when site goes DOWN and again when it comes UP
+
+Show examples of integration in README
+
+Frontend Requirements
+
+UI must include:
+
+Main Features
+
+Input field for a website (URL)
+
+Button: “Check Uptime Now”
+
+Results panel showing:
+
+HTTP status
+
+Response time
+
+SSL information
+
+DNS records
+
+Redirect chain
+
+Formatted timestamp
+
+Monitoring Mode
+
+UI to add URL to monitoring list
+
+Table showing:
+
+domain
+
+last status
+
+last response time
+
+uptime percentage (based on stored history)
+
+Click on a site to view:
+
+sparkline chart of the last 20 checks
+
+list of UP/DOWN events
+
+SSL expiration countdown
+
+UX
+
+Dark/light toggle
+
+Error messages for invalid URLs or unreachable backend
+
+LocalStorage for UI preferences
+
+Loading indicators during checks
+
+Backend Requirements
+Endpoints
+1. GET /check?url=https://example.com
+
+Perform:
+
+HTTP GET with 10 sec timeout
+
+Measure response time
+
+Follow redirects (up to 5)
+
+Collect:
+
+final status code
+
+redirect chain
+
+final URL
+
+SSL certificate details (if HTTPS)
+
+Resolve DNS records using appropriate library
+
+Return JSON:
+
+{
+  "status_code": 200,
+  "status_text": "UP",
+  "response_time_ms": 132,
+  "final_url": "https://example.com",
+  "redirect_chain": [...],
+  "ssl": {
+    "valid": true,
+    "issuer": "Let's Encrypt",
+    "expires": "2025-03-01T12:00:00Z",
+    "days_remaining": 43
+  },
+  "dns": {
+    "A": [...],
+    "AAAA": [...],
+    "CNAME": [...],
+    "MX": [...],
+    "NS": [...]
+  },
+  "timestamp": "2025-01-01T12:22:55Z"
+}
+
+2. GET /monitor/list
+
+Returns all monitored URLs and last known status.
+
+3. POST /monitor/add
+
+Add a URL to monitoring.
+
+4. DELETE /monitor/remove
+
+Remove a URL.
+
+5. GET /monitor/history?url=...
+
+Returns last 20 checks.
+
+DevOps & Deliverables
+
+Provide:
+
+Fully functional frontend code
+
+Fully functional backend code
+
+Dockerfile (frontend)
+
+Dockerfile (backend)
+
+docker-compose.yml
+
+Tailwind config, Vite config, tsconfig
+
+README explaining:
+
+local run instructions
+
+Docker usage
+
+Cloud Run deployment
+
+How monitoring works
+
+How to configure email/webhook alerts
+
+Unit tests for:
+
+uptime check
+
+SSL parsing
+
+DNS resolver
+
+monitoring scheduler
+
+PROMPT END
